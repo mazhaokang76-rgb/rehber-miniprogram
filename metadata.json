@@ -1,0 +1,8 @@
+{
+  "name": "NeuroMotion AI",
+  "description": "A real-time motion correction engine using local computer vision and Gemini AI for rehabilitation feedback.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
