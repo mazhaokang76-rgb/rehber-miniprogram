@@ -1,0 +1,20 @@
+<!--pages/news-detail/news-detail.wxml-->
+<view class="news-detail-container">
+  <view class="news-header">
+    <image 
+      src="{{news.coverImage}}" 
+      class="news-cover"
+      mode="aspectFill"
+    />
+  </view>
+  
+  <view class="news-content">
+    <text class="news-title">{{news.title}}</text>
+    <view class="news-meta">
+      <text class="news-category">{{news.category}}</text>
+      <text class="news-date">{{news.date}}</text>
+      <text class="news-author">{{news.author}}</text>
+    </view>
+    <text class="news-text">{{news.summary}}</text>
+  </view>
+</view>

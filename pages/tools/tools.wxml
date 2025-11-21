@@ -1,0 +1,206 @@
+<!--pages/tools/tools.wxml-->
+<view class="tools-container">
+  <!-- 顶部导航 -->
+  <view class="header">
+    <view class="header-content">
+      <text class="page-title">健康工具</text>
+      <text class="page-subtitle">科学的健康评估工具</text>
+    </view>
+  </view>
+
+  <!-- 工具列表 -->
+  <view class="tools-grid">
+    <!-- 卡路里计算器 -->
+    <view class="tool-card" bindtap="handleToolTap" data-tool="calorie">
+      <view class="tool-icon calorie-icon">
+        <text class="icon-text">🔥</text>
+      </view>
+      <view class="tool-info">
+        <text class="tool-name">卡路里计算器</text>
+        <text class="tool-desc">计算每日所需卡路里摄入量</text>
+      </view>
+      <view class="tool-arrow">›</view>
+    </view>
+
+    <!-- 最佳心率计算器 -->
+    <view class="tool-card" bindtap="handleToolTap" data-tool="heartrate">
+      <view class="tool-icon heartrate-icon">
+        <text class="icon-text">💓</text>
+      </view>
+      <view class="tool-info">
+        <text class="tool-name">最佳心率计算器</text>
+        <text class="tool-desc">计算运动时的最佳心率区间</text>
+      </view>
+      <view class="tool-arrow">›</view>
+    </view>
+  </view>
+
+  <!-- 卡路里计算器弹窗 -->
+  <view class="modal {{showCalorieModal ? 'active' : ''}}" bindtap="handleCloseModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">卡路里计算器</text>
+        <view class="close-btn" bindtap="handleCloseModal">×</view>
+      </view>
+
+      <view class="modal-body">
+        <view class="form-group">
+          <text class="form-label">性别</text>
+          <view class="radio-group">
+            <view 
+              class="radio-item {{calorieForm.gender === 'male' ? 'active' : ''}}" 
+              bindtap="handleGenderChange" 
+              data-gender="male"
+            >
+              男性
+            </view>
+            <view 
+              class="radio-item {{calorieForm.gender === 'female' ? 'active' : ''}}" 
+              bindtap="handleGenderChange" 
+              data-gender="female"
+            >
+              女性
+            </view>
+          </view>
+        </view>
+
+        <view class="form-group">
+          <text class="form-label">年龄（岁）</text>
+          <input 
+            class="form-input" 
+            type="number" 
+            placeholder="请输入年龄" 
+            value="{{calorieForm.age}}"
+            bindinput="handleAgeInput"
+          />
+        </view>
+
+        <view class="form-group">
+          <text class="form-label">身高（cm）</text>
+          <input 
+            class="form-input" 
+            type="number" 
+            placeholder="请输入身高" 
+            value="{{calorieForm.height}}"
+            bindinput="handleHeightInput"
+          />
+        </view>
+
+        <view class="form-group">
+          <text class="form-label">体重（kg）</text>
+          <input 
+            class="form-input" 
+            type="number" 
+            placeholder="请输入体重" 
+            value="{{calorieForm.weight}}"
+            bindinput="handleWeightInput"
+          />
+        </view>
+
+        <view class="form-group">
+          <text class="form-label">活动水平</text>
+          <picker 
+            mode="selector" 
+            range="{{activityLevels}}" 
+            value="{{calorieForm.activityIndex}}"
+            bindchange="handleActivityChange"
+          >
+            <view class="picker-display">
+              {{activityLevels[calorieForm.activityIndex]}}
+            </view>
+          </picker>
+        </view>
+
+        <button class="calculate-btn" bindtap="handleCalculateCalorie">计算</button>
+
+        <view wx:if="{{calorieResult}}" class="result-box">
+          <text class="result-label">每日所需卡路里</text>
+          <text class="result-value">{{calorieResult.bmr}} <text class="result-unit">kcal</text></text>
+          <text class="result-label">总消耗（含活动）</text>
+          <text class="result-value">{{calorieResult.tdee}} <text class="result-unit">kcal</text></text>
+          <view class="result-tips">
+            <text class="tip-item">减重：{{calorieResult.lose}} kcal</text>
+            <text class="tip-item">维持：{{calorieResult.maintain}} kcal</text>
+            <text class="tip-item">增重：{{calorieResult.gain}} kcal</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 心率计算器弹窗 -->
+  <view class="modal {{showHeartrateModal ? 'active' : ''}}" bindtap="handleCloseModal">
+    <view class="modal-content" catchtap="stopPropagation">
+      <view class="modal-header">
+        <text class="modal-title">最佳心率计算器</text>
+        <view class="close-btn" bindtap="handleCloseModal">×</view>
+      </view>
+
+      <view class="modal-body">
+        <view class="form-group">
+          <text class="form-label">年龄（岁）</text>
+          <input 
+            class="form-input" 
+            type="number" 
+            placeholder="请输入年龄" 
+            value="{{heartrateForm.age}}"
+            bindinput="handleHeartrateAgeInput"
+          />
+        </view>
+
+        <view class="form-group">
+          <text class="form-label">静息心率（次/分）</text>
+          <input 
+            class="form-input" 
+            type="number" 
+            placeholder="早晨起床前测量" 
+            value="{{heartrateForm.restingHr}}"
+            bindinput="handleRestingHrInput"
+          />
+          <text class="form-hint">建议在早晨起床前安静状态下测量</text>
+        </view>
+
+        <button class="calculate-btn" bindtap="handleCalculateHeartrate">计算</button>
+
+        <view wx:if="{{heartrateResult}}" class="result-box">
+          <text class="result-label">最大心率</text>
+          <text class="result-value">{{heartrateResult.maxHr}} <text class="result-unit">次/分</text></text>
+          
+          <view class="hr-zones">
+            <view class="hr-zone">
+              <view class="zone-header">
+                <text class="zone-name">热身区</text>
+                <text class="zone-range">{{heartrateResult.zones.warmup}}</text>
+              </view>
+              <text class="zone-desc">轻松活动，适合热身和恢复</text>
+            </view>
+
+            <view class="hr-zone">
+              <view class="zone-header">
+                <text class="zone-name">燃脂区</text>
+                <text class="zone-range">{{heartrateResult.zones.fatburn}}</text>
+              </view>
+              <text class="zone-desc">持续有氧，主要燃烧脂肪</text>
+            </view>
+
+            <view class="hr-zone">
+              <view class="zone-header">
+                <text class="zone-name">有氧区</text>
+                <text class="zone-range">{{heartrateResult.zones.cardio}}</text>
+              </view>
+              <text class="zone-desc">提升心肺功能和耐力</text>
+            </view>
+
+            <view class="hr-zone">
+              <view class="zone-header">
+                <text class="zone-name">无氧区</text>
+                <text class="zone-range">{{heartrateResult.zones.peak}}</text>
+              </view>
+              <text class="zone-desc">高强度训练，提升爆发力</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

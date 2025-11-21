@@ -1,0 +1,104 @@
+<!-- pages/video-detail/video-detail.wxml -->
+<view class="container">
+  <!-- 返回按钮 -->
+  <view class="back-button" bindtap="handleBack">
+    <text class="back-icon">←</text>
+  </view>
+
+  <!-- 网络提示 -->
+  <view wx:if="{{showNetworkTip}}" class="network-tip">
+    当前使用{{networkType}}网络，继续播放可能消耗流量
+  </view>
+
+  <!-- 视频播放器区域 -->
+  <view class="video-wrapper">
+    <block wx:if="{{!isLoading}}">
+      <video
+        id="videoPlayer"
+        class="video-player"
+        src="{{video.videoUrl}}"
+        poster="{{video.thumbnail}}"
+        controls
+        show-center-play-btn
+        enable-play-gesture
+        object-fit="contain"
+        bindready="handleVideoReady"
+        bindplay="handleVideoPlay"
+        bindpause="handleVideoPause"
+        bindended="handleVideoEnded"
+        binderror="handleVideoError"
+        bindtimeupdate="handleTimeUpdate"
+        bindfullscreenchange="handleFullScreenChange"
+      />
+    </block>
+    
+    <block wx:else>
+      <view class="loading-container">
+        <text class="loading-text">加载中...</text>
+      </view>
+    </block>
+  </view>
+
+  <!-- 视频信息卡片 -->
+  <view class="video-info">
+    <text class="video-title">{{video.title}}</text>
+    
+    <view class="video-meta">
+      <view class="category">{{video.category}}</view>
+      <text class="duration">⏱ {{video.duration}}</text>
+      <text class="views">👁 {{video.views}} 次观看</text>
+    </view>
+
+    <text class="video-description" wx:if="{{video.description}}">
+      {{video.description}}
+    </text>
+
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <button 
+        class="btn-favorite {{isFavorited ? 'favorited' : ''}}" 
+        bindtap="handleFavorite"
+      >
+        {{isFavorited ? '★ 已收藏' : '☆ 收藏'}}
+      </button>
+      
+      <button class="btn-share" bindtap="handleShare">
+        ⇧ 分享
+      </button>
+    </view>
+  </view>
+
+  <!-- 相关推荐视频 -->
+  <view class="related-videos" wx:if="{{relatedVideos.length > 0}}">
+    <view class="related-title">相关推荐</view>
+    
+    <view class="related-list">
+      <view 
+        wx:for="{{relatedVideos}}" 
+        wx:key="id" 
+        class="related-video-item"
+        bindtap="navigateToVideo"
+        data-id="{{item.id}}"
+      >
+        <view class="related-thumbnail">
+          <image src="{{item.thumbnail}}" mode="aspectFill"/>
+          <view class="play-icon"></view>
+        </view>
+        
+        <view class="related-info">
+          <text class="related-video-title">{{item.title}}</text>
+          <view class="related-meta">
+            <text class="related-duration">{{item.duration}}</text>
+            <text class="related-views">{{item.views}} 观看</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{relatedVideos.length === 0 && !isLoading}}">
+    <text class="empty-icon">📹</text>
+    <text class="empty-text">暂无相关推荐</text>
+  </view>
+</view>

@@ -1,0 +1,182 @@
+<!--pages/community/community.wxml-->
+<view class="community-container">
+  <!-- 顶部固定导航 -->
+  <view class="header">
+    <view class="header-content">
+      <view class="title-section">
+        <text class="page-title">{{showFavorites ? '我的收藏' : '社区动态'}}</text>
+        <view wx:if="{{!showFavorites}}" class="live-tag">
+          <text class="live-dot"></text>
+          <text>Live</text>
+        </view>
+      </view>
+      <view class="header-actions">
+        <view class="tab-btn {{!showFavorites ? 'active' : ''}}" bindtap="handleShowAll">
+          <text>全部</text>
+        </view>
+        <view class="tab-btn {{showFavorites ? 'active' : ''}}" bindtap="handleShowFavorites">
+          <view class="favorite-badge-wrapper">
+            <text>收藏</text>
+            <view wx:if="{{favoriteCount > 0}}" class="favorite-badge">{{favoriteCount}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 瀑布流活动列表 -->
+  <view class="waterfall-container">
+    <!-- 显示全部活动 -->
+    <view wx:if="{{!showFavorites}}">
+      <view wx:if="{{events.length === 0}}" class="empty-state">
+        <view class="empty-icon">活动</view>
+        <text class="empty-text">暂无活动</text>
+        <text class="empty-subtitle">快来发布第一个活动吧</text>
+      </view>
+
+      <view wx:else class="waterfall-list">
+        <view 
+          wx:for="{{events}}" 
+          wx:key="id"
+          class="waterfall-item"
+          style="animation-delay: {{index * 0.1}}s"
+        >
+          <view class="activity-card" bindtap="handleActivityTap" data-activity="{{item}}">
+            <!-- 活动图片 -->
+            <view class="activity-image">
+              <image 
+                src="{{item.image}}" 
+                mode="aspectFill"
+                class="activity-img"
+              />
+              <view class="location-tag">
+                <text class="location-icon">地点</text>
+                <text class="location-text">{{item.location}}</text>
+              </view>
+            </view>
+
+            <!-- 活动信息 -->
+            <view class="activity-content">
+              <text class="activity-title">{{item.title}}</text>
+              
+              <view class="activity-time">
+                <text class="time-icon">时间</text>
+                <text class="time-text">{{item.time}}</text>
+              </view>
+
+              <!-- 活动统计 -->
+              <view class="activity-stats">
+                <view class="organizer-info">
+                  <image 
+                    src="{{item.userAvatar}}" 
+                    class="organizer-avatar"
+                    mode="aspectFill"
+                  />
+                  <text class="organizer-name">{{item.userName}}</text>
+                </view>
+                
+                <view class="activity-actions">
+                  <view class="like-btn" bindtap="handleLike" data-activity="{{item}}">
+                    <text class="like-icon">点赞</text>
+                    <text class="like-count">{{item.likes}}</text>
+                  </view>
+                  <view class="favorite-btn {{favoriteMap[item.id] ? 'favorited' : ''}}" 
+                        bindtap="handleFavorite" 
+                        data-activity="{{item}}"
+                        catchtap="handleFavorite">
+                    <text class="favorite-icon">{{favoriteMap[item.id] ? '已收藏' : '收藏'}}</text>
+                  </view>
+                  <view class="share-btn" bindtap="handleShareActivity" data-activity="{{item}}" catchtap="handleShareActivity">
+                    <text class="share-icon">分享</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 显示收藏的活动 -->
+    <view wx:if="{{showFavorites}}">
+      <view wx:if="{{favoriteEvents.length === 0}}" class="empty-state">
+        <view class="empty-icon">收藏</view>
+        <text class="empty-text">没有收藏的活动</text>
+        <text class="empty-subtitle">去看看你感兴趣的吧</text>
+      </view>
+
+      <view wx:else class="waterfall-list">
+        <view 
+          wx:for="{{favoriteEvents}}" 
+          wx:key="id"
+          class="waterfall-item"
+          style="animation-delay: {{index * 0.1}}s"
+        >
+          <view class="activity-card" bindtap="handleActivityTap" data-activity="{{item}}">
+            <!-- 活动图片 -->
+            <view class="activity-image">
+              <image 
+                src="{{item.image}}" 
+                mode="aspectFill"
+                class="activity-img"
+              />
+              <view class="location-tag">
+                <text class="location-icon">地点</text>
+                <text class="location-text">{{item.location}}</text>
+              </view>
+            </view>
+
+            <!-- 活动信息 -->
+            <view class="activity-content">
+              <text class="activity-title">{{item.title}}</text>
+              
+              <view class="activity-time">
+                <text class="time-icon">时间</text>
+                <text class="time-text">{{item.time}}</text>
+              </view>
+
+              <!-- 活动统计 -->
+              <view class="activity-stats">
+                <view class="organizer-info">
+                  <image 
+                    src="{{item.userAvatar}}" 
+                    class="organizer-avatar"
+                    mode="aspectFill"
+                  />
+                  <text class="organizer-name">{{item.userName}}</text>
+                </view>
+                
+                <view class="activity-actions">
+                  <view class="like-btn" bindtap="handleLike" data-activity="{{item}}">
+                    <text class="like-icon">点赞</text>
+                    <text class="like-count">{{item.likes}}</text>
+                  </view>
+                  <view class="favorite-btn {{favoriteMap[item.id] ? 'favorited' : ''}}" 
+                        bindtap="handleFavorite" 
+                        data-activity="{{item}}"
+                        catchtap="handleFavorite">
+                    <text class="favorite-icon">{{favoriteMap[item.id] ? '已收藏' : '收藏'}}</text>
+                  </view>
+                  <view class="share-btn" bindtap="handleShareActivity" data-activity="{{item}}" catchtap="handleShareActivity">
+                    <text class="share-icon">分享</text>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载更多 -->
+  <view wx:if="{{loadingMore}}" class="load-more">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 没有更多数据 -->
+  <view wx:if="{{!hasMore && events.length > 0 && !showFavorites}}" class="no-more">
+    <text>已加载全部</text>
+  </view>
+</view>

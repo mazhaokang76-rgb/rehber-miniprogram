@@ -1,0 +1,131 @@
+<!--pages/profile/profile.wxml-->
+<view class="profile-container">
+  <!-- 用户信息头部 -->
+  <view class="profile-header">
+    <!-- 背景装饰 -->
+    <view class="header-bg">
+      <view class="bg-blob blob-1"></view>
+      <view class="bg-blob blob-2"></view>
+    </view>
+
+    <!-- 头部内容 -->
+    <view class="header-content">
+      <view class="logout-btn" bindtap="handleLogout">
+        <text class="logout-icon">🚪</text>
+      </view>
+
+      <view class="user-info">
+        <view class="avatar-container">
+          <image 
+            src="{{userProfile.avatar_url || user.avatar}}" 
+            class="user-avatar"
+            mode="aspectFill"
+          />
+          <view class="vip-badge">
+            <text class="vip-icon">🏆</text>
+          </view>
+          <!-- 头像编辑按钮 -->
+          <view class="avatar-edit-btn" bindtap="handleEditAvatar">
+            <text class="camera-icon">📷</text>
+          </view>
+        </view>
+
+        <view class="user-details">
+          <view class="username-row">
+            <text class="user-name">{{userProfile.nickname || user.name}}</text>
+            <!-- 昵称编辑图标 -->
+            <view class="nickname-edit-icon" bindtap="handleEditNickname">
+              <text class="edit-icon">✏️</text>
+            </view>
+          </view>
+          <view class="vip-tag">
+            <text>VIP 运动家</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 统计卡片 -->
+      <view class="stats-card">
+        <view class="stat-item" bindtap="handleLoginDaysClick">
+          <text class="stat-number">{{userStats.loginDays}}</text>
+          <text class="stat-label">登录天数</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item" bindtap="handleSubscriptionsClick">
+          <text class="stat-number">{{userStats.subscriptions}}</text>
+          <text class="stat-label">订阅主题</text>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat-item" bindtap="handleFavoriteClick">
+          <text class="stat-number">{{userStats.favoriteCount}}</text>
+          <text class="stat-label">活动收藏</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 健康语录卡片 -->
+  <view wx:if="{{healthQuote}}" class="health-quote-section">
+    <view class="health-quote-card" bindtap="handleQuoteClick" bindlongpress="handleQuoteLongPress">
+      <view class="quote-icon">💬</view>
+      <view class="quote-content">
+        <text class="quote-text">{{healthQuote.content}}</text>
+        <text class="quote-author">— {{healthQuote.author || '健康小助手'}}</text>
+      </view>
+      <view wx:if="{{showQuoteRefresh}}" class="refresh-btn" bindtap="handleRefreshQuote">
+        <text class="refresh-icon">🔄</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 设置区域 -->
+  <view class="settings-section">
+    <!-- 其他设置 -->
+    <view class="settings-card">
+      <view class="settings-menu">
+        <view class="menu-item" bindtap="handleAbout">
+          <view class="menu-icon">ℹ️</view>
+          <text class="menu-text">关于应用</text>
+          <text class="menu-arrow">→</text>
+        </view>
+
+        <view class="menu-item" bindtap="handleFeedback">
+          <view class="menu-icon">💬</view>
+          <text class="menu-text">意见反馈</text>
+          <text class="menu-arrow">→</text>
+        </view>
+
+        <view class="menu-item" bindtap="handlePrivacy">
+          <view class="menu-icon">🔒</view>
+          <text class="menu-text">隐私政策</text>
+          <text class="menu-arrow">→</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 版本信息 -->
+  <view class="version-info">
+    <text>Rehaber Version 1.0.2</text>
+  </view>
+
+  <!-- 昵称编辑弹窗 -->
+  <view wx:if="{{showNicknameModal}}" class="nickname-modal">
+    <view class="modal-mask" bindtap="closeNicknameModal"></view>
+    <view class="nickname-modal-content">
+      <text class="nickname-modal-title">修改昵称</text>
+      <input 
+        class="nickname-input" 
+        type="text" 
+        placeholder="请输入新昵称" 
+        value="{{newNickname}}"
+        bindinput="onNicknameInput"
+        maxlength="20"
+      />
+      <view class="nickname-modal-actions">
+        <view class="nickname-modal-btn cancel" bindtap="closeNicknameModal">取消</view>
+        <view class="nickname-modal-btn confirm" bindtap="saveNickname">保存</view>
+      </view>
+    </view>
+  </view>
+</view>

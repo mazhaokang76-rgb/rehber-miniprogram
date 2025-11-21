@@ -1,20 +1,191 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# 锐汗步 Rehaber 微信小程序
 
-# Run and deploy your AI Studio app
+## 项目简介
 
-This contains everything you need to run your app locally.
+锐汗步（Rehaber）是一款专为运动爱好者和轻度康复人群设计的轻康复资讯平台小程序。用户可以通过平台获取专业的康复训练视频、健康资讯，并参与社区活动，实现科学康复和健康生活。
 
-View your app in AI Studio: https://ai.studio/apps/drive/151y9-yA2dcS8XIKFoX2uHVQ9RyxGEayx
+## 功能特色
 
-## Run Locally
+### 🏠 首页
+- **个性化推荐**：基于用户订阅主题推荐训练视频和健康资讯
+- **训练视频库**：分类整理的运动复健、核心训练、心肺功能等视频内容
+- **健康资讯**：专业的康复知识和健康科普文章
+- **清新界面**：采用绿色主题的清新自然设计风格
 
-**Prerequisites:**  Node.js
+### 👥 社区
+- **活动发布**：支持用户发布康复训练相关的社区活动
+- **瀑布流布局**：优雅的活动展示方式，支持卡片式浏览
+- **互动功能**：活动点赞、关注等社交功能
+- **分类管理**：按时间、地点等维度组织活动信息
 
+### 👤 个人中心
+- **用户管理**：完整的用户信息管理，包括头像、昵称等
+- **订阅设置**：灵活的主题订阅管理（运动复健/核心训练/心肺功能/其他训练）
+- **数据统计**：登录天数、订阅主题、完成训练等统计数据
+- **设置中心**：关于应用、意见反馈、隐私政策等功能
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## 技术栈
+
+### 前端
+- **微信小程序原生框架**：WXML + WXSS + JavaScript
+- **组件化开发**：页面组件化结构
+- **响应式设计**：适配不同屏幕尺寸
+
+### 后端
+- **数据库**：Supabase PostgreSQL 数据库
+- **云服务**：支持微信云开发
+- **API设计**：RESTful API 设计
+
+### 数据存储
+- **用户数据**：用户信息、登录记录、订阅设置
+- **内容数据**：训练视频、健康资讯、社群活动
+- **本地缓存**：用户登录状态、个人设置等
+
+## 项目结构
+
+```
+miniprogram/
+├── app.js              # 小程序主逻辑
+├── app.json            # 小程序配置
+├── app.wxss            # 全局样式
+├── sitemap.json        # 搜索优化配置
+├── pages/              # 页面目录
+│   ├── login/          # 登录页面
+│   ├── home/           # 首页
+│   ├── community/      # 社区页面
+│   └── profile/        # 个人中心
+├── utils/              # 工具类
+│   ├── types.js        # 类型定义
+│   ├── userManager.js  # 用户管理
+│   └── util.js         # 通用工具
+├── services/           # 服务层
+│   └── cloudService.js # 云服务适配
+└── assets/             # 静态资源
+    ├── icons/          # 图标文件
+    └── images/         # 图片文件
+```
+
+## 开发说明
+
+### 环境要求
+- 微信开发者工具 1.06.0 或以上版本
+- Node.js 16.0 或以上版本（用于构建工具）
+
+### 本地开发
+1. 使用微信开发者工具打开项目目录
+2. 在微信开发者工具中进行调试和预览
+3. 使用真机预览功能测试实际效果
+
+### 配置说明
+
+#### Supabase 配置
+在 `services/cloudService.js` 中配置 Supabase 连接信息：
+```javascript
+this.supabaseConfig = {
+  url: 'YOUR_SUPABASE_URL',
+  key: 'YOUR_SUPABASE_ANON_KEY'
+};
+```
+
+#### 微信云开发配置
+在 `app.js` 中配置微信云开发环境：
+```javascript
+wx.cloud.init({
+  env: 'your-cloud-env-id',
+  traceUser: true,
+});
+```
+
+### 数据库设计
+
+#### 用户表 (users)
+- `id`: 用户唯一标识
+- `name`: 用户昵称
+- `phone`: 手机号
+- `avatar`: 头像URL
+- `login_count`: 登录次数
+- `subscriptions`: 订阅主题数组
+- `created_at`: 创建时间
+
+#### 视频表 (videos)
+- `id`: 视频唯一标识
+- `title`: 视频标题
+- `category`: 分类
+- `thumbnail`: 缩略图
+- `duration`: 时长
+- `views`: 观看次数
+
+#### 资讯表 (news)
+- `id`: 资讯唯一标识
+- `title`: 标题
+- `category`: 分类
+- `summary`: 摘要
+- `cover_image`: 封面图
+- `date`: 发布日期
+
+#### 活动表 (events)
+- `id`: 活动唯一标识
+- `title`: 活动标题
+- `location`: 地点
+- `time`: 时间
+- `image`: 活动图片
+- `likes`: 点赞数
+
+## 部署说明
+
+### 微信小程序发布
+1. 在微信公众平台注册小程序账号
+2. 配置服务器域名白名单
+3. 提交代码审核
+4. 发布上线
+
+### 后端部署
+- **Supabase**：可以直接使用托管的 Supabase 服务
+- **微信云**：在微信开发者工具中开通云开发服务
+
+## 开发计划
+
+### 已完成功能
+- ✅ 用户登录注册
+- ✅ 首页内容展示
+- ✅ 社区瀑布流布局
+- ✅ 个人中心管理
+- ✅ 订阅设置功能
+
+### 开发中功能
+- 🔄 视频详情页面
+- 🔄 资讯详情页面
+- 🔄 活动详情功能
+- 🔄 搜索功能
+
+### 计划功能
+- 📋 训练计划制定
+- 📋 进度跟踪
+- 📋 社交互动
+- 📋 数据分析
+
+## 注意事项
+
+1. **网络请求**：小程序只能请求 HTTPS 域名，需要配置服务器证书
+2. **用户授权**：使用微信登录需要配置相应的权限
+3. **数据安全**：注意用户隐私数据的保护
+4. **性能优化**：注意图片压缩和懒加载
+5. **兼容性**：测试不同设备和微信版本兼容性
+
+## 贡献指南
+
+欢迎提交 Issue 和 Pull Request 来帮助改进项目。
+
+## 许可证
+
+本项目采用 MIT 许可证。
+
+## 联系我们
+
+如有问题或建议，请通过以下方式联系：
+- 邮箱：feedback@rehaber.com
+- 微信：RehaberService
+
+---
+
+**锐汗步 Rehaber** - 让康复训练更简单，让健康生活更美好！

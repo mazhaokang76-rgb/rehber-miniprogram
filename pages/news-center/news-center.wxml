@@ -1,0 +1,178 @@
+<!--pages/news-center/news-center.wxml-->
+<view class="news-center-container">
+  <!-- 顶部固定导航 -->
+  <view class="header">
+    <view class="header-content">
+      <text class="page-title">资讯中心</text>
+      <view class="search-box" bindtap="handleShowSearch">
+        <text class="search-icon">🔍</text>
+        <text class="search-placeholder">搜索健康资讯和视频</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 搜索面板 -->
+  <view class="search-panel {{showSearch ? 'active' : ''}}">
+    <view class="search-input-box">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        placeholder="输入关键词搜索..." 
+        value="{{searchKeyword}}"
+        bindinput="handleSearchInput"
+        confirm-type="search"
+        bindconfirm="handleSearch"
+      />
+      <text class="cancel-btn" bindtap="handleCancelSearch">取消</text>
+    </view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content-area">
+    <!-- 偏好引导提示 -->
+    <view wx:if="{{showPreferenceGuide}}" class="preference-guide">
+      <view class="guide-icon">提示</view>
+      <view class="guide-content">
+        <text class="guide-title">个性化推荐</text>
+        <text class="guide-desc">设置您的订阅偏好，获取更精准的内容推荐</text>
+      </view>
+      <view class="guide-action" bindtap="goToPreferenceSettings">
+        <text>去设置</text>
+      </view>
+    </view>
+
+    <!-- 内容模式切换Tab -->
+    <view class="content-mode-tabs">
+      <view 
+        class="mode-tab {{contentMode === 'recommended' ? 'active' : ''}}"
+        bindtap="switchContentMode"
+        data-mode="recommended"
+      >
+        <text>为你推荐</text>
+        <view wx:if="{{contentMode === 'recommended'}}" class="mode-indicator"></view>
+      </view>
+      <view 
+        class="mode-tab {{contentMode === 'all' ? 'active' : ''}}"
+        bindtap="switchContentMode"
+        data-mode="all"
+      >
+        <text>全部内容</text>
+        <view wx:if="{{contentMode === 'all'}}" class="mode-indicator"></view>
+      </view>
+    </view>
+
+    <!-- Tab切换 -->
+    <view class="tabs">
+      <view 
+        class="tab-item {{activeTab === 'all' ? 'active' : ''}}" 
+        bindtap="handleTabChange" 
+        data-tab="all"
+      >
+        全部
+      </view>
+      <view 
+        class="tab-item {{activeTab === 'video' ? 'active' : ''}}" 
+        bindtap="handleTabChange" 
+        data-tab="video"
+      >
+        视频
+      </view>
+      <view 
+        class="tab-item {{activeTab === 'article' ? 'active' : ''}}" 
+        bindtap="handleTabChange" 
+        data-tab="article"
+      >
+        文章
+      </view>
+    </view>
+
+    <!-- 瀑布流布局 -->
+    <view class="waterfall-container">
+      <view class="waterfall-column">
+        <view 
+          wx:for="{{leftColumn}}" 
+          wx:key="id" 
+          class="waterfall-item"
+          bindtap="handleItemTap"
+          data-item="{{item}}"
+        >
+          <!-- 图片/视频封面 -->
+          <view class="item-cover">
+            <image 
+              class="cover-image" 
+              src="{{item.coverImage || item.thumbnail}}" 
+              mode="widthFix"
+              lazy-load
+            />
+            <view wx:if="{{item.type === 'video'}}" class="video-badge">
+              <text class="badge-icon">▶</text>
+              <text class="badge-text">{{item.duration}}</text>
+            </view>
+          </view>
+
+          <!-- 内容信息 -->
+          <view class="item-content">
+            <view class="item-category">{{item.category}}</view>
+            <text class="item-title">{{item.title}}</text>
+            <!-- 标签 -->
+            <view wx:if="{{item.tags && item.tags.length > 0}}" class="content-tags">
+              <text wx:for="{{item.tags}}" wx:key="index" wx:for-item="tag" class="content-tag">{{tag}}</text>
+            </view>
+            <view class="item-meta">
+              <text class="meta-text">{{item.views || item.date}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <view class="waterfall-column">
+        <view 
+          wx:for="{{rightColumn}}" 
+          wx:key="id" 
+          class="waterfall-item"
+          bindtap="handleItemTap"
+          data-item="{{item}}"
+        >
+          <!-- 图片/视频封面 -->
+          <view class="item-cover">
+            <image 
+              class="cover-image" 
+              src="{{item.coverImage || item.thumbnail}}" 
+              mode="widthFix"
+              lazy-load
+            />
+            <view wx:if="{{item.type === 'video'}}" class="video-badge">
+              <text class="badge-icon">▶</text>
+              <text class="badge-text">{{item.duration}}</text>
+            </view>
+          </view>
+
+          <!-- 内容信息 -->
+          <view class="item-content">
+            <view class="item-category">{{item.category}}</view>
+            <text class="item-title">{{item.title}}</text>
+            <!-- 标签 -->
+            <view wx:if="{{item.tags && item.tags.length > 0}}" class="content-tags">
+              <text wx:for="{{item.tags}}" wx:key="index" wx:for-item="tag" class="content-tag">{{tag}}</text>
+            </view>
+            <view class="item-meta">
+              <text class="meta-text">{{item.views || item.date}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view wx:if="{{leftColumn.length === 0 && rightColumn.length === 0 && !loading}}" class="empty-state">
+      <text class="empty-icon">📭</text>
+      <text class="empty-text">暂无内容</text>
+    </view>
+
+    <!-- 加载状态 -->
+    <view wx:if="{{loading}}" class="loading-container">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">加载中...</text>
+    </view>
+  </view>
+</view>

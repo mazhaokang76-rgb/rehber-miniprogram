@@ -1,0 +1,61 @@
+{
+  "pages": [
+    "pages/home/home", 
+    "pages/news-center/news-center",
+    "pages/community/community",
+    "pages/tools/tools",
+    "pages/profile/profile",
+    "pages/subscription-settings/subscription-settings",
+    "pages/login/login",
+    "pages/video-detail/video-detail",
+    "pages/news-detail/news-detail",
+    "pages/test-api/test-api"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTitleText": "锐汗步 Rehaber",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f8fafc"
+  },
+  "tabBar": {
+    "color": "#64748b",
+    "selectedColor": "#10b981",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "assets/icons/home.png",
+        "selectedIconPath": "assets/icons/home-active.png"
+      },
+      {
+        "pagePath": "pages/news-center/news-center",
+        "text": "资讯",
+        "iconPath": "assets/icons/news.png",
+        "selectedIconPath": "assets/icons/news-active.png"
+      },
+      {
+        "pagePath": "pages/community/community", 
+        "text": "社区",
+        "iconPath": "assets/icons/community.png",
+        "selectedIconPath": "assets/icons/community-active.png"
+      },
+      {
+        "pagePath": "pages/tools/tools",
+        "text": "工具",
+        "iconPath": "assets/icons/tools.png",
+        "selectedIconPath": "assets/icons/tools-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的", 
+        "iconPath": "assets/icons/profile.png",
+        "selectedIconPath": "assets/icons/profile-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

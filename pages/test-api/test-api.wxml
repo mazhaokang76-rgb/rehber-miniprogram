@@ -1,0 +1,53 @@
+<!-- pages/test-api/test-api.wxml -->
+<view class="test-container">
+  <view class="header">
+    <text class="title">Supabase API 连接测试</text>
+    <text class="subtitle">验证数据库连接和数据加载功能</text>
+  </view>
+
+  <!-- 测试按钮区域 -->
+  <view class="button-section">
+    <button class="test-button" bindtap="testSupabaseConnection" disabled="{{isLoading}}">
+      {{isLoading ? '测试中...' : '测试数据库连接'}}
+    </button>
+    
+    <button class="test-button secondary" bindtap="testUserCreation" disabled="{{isLoading}}">
+      {{isLoading ? '创建中...' : '测试用户创建'}}
+    </button>
+  </view>
+
+  <!-- 测试结果区域 -->
+  <view class="results-section" wx:if="{{testResults.length > 0}}">
+    <text class="section-title">测试结果</text>
+    
+    <view class="result-item" wx:for="{{testResults}}" wx:key="name">
+      <view class="result-header">
+        <text class="result-name">{{item.name}}</text>
+        <text class="result-status">{{item.status}}</text>
+      </view>
+      
+      <view class="result-details" wx:if="{{item.count}}">
+        <text class="result-count">数据条数: {{item.count}}</text>
+      </view>
+      
+      <view class="result-error" wx:if="{{item.error}}">
+        <text class="error-text">错误信息: {{item.error}}</text>
+      </view>
+      
+      <!-- 示例数据预览 -->
+      <view class="data-preview" wx:if="{{item.data}}">
+        <text class="preview-title">示例数据:</text>
+        <text class="preview-content">{{item.data.title || item.data.name}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 使用说明 -->
+  <view class="instructions">
+    <text class="instructions-title">使用说明:</text>
+    <text class="instruction-text">1. 点击"测试数据库连接"验证API是否正常工作</text>
+    <text class="instruction-text">2. 点击"测试用户创建"验证用户数据写入功能</text>
+    <text class="instruction-text">3. 查看控制台日志了解详细测试信息</text>
+    <text class="instruction-text">4. 如果测试失败，请检查网络连接和域名配置</text>
+  </view>
+</view>

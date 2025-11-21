@@ -1,0 +1,155 @@
+/* pages/test-api/test-api.wxss */
+.test-container {
+  padding: 20rpx;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40rpx;
+}
+
+.title {
+  display: block;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 10rpx;
+}
+
+.subtitle {
+  display: block;
+  font-size: 28rpx;
+  color: #6b7280;
+}
+
+.button-section {
+  margin-bottom: 40rpx;
+}
+
+.test-button {
+  width: 100%;
+  height: 88rpx;
+  background-color: #10b981;
+  color: white;
+  border: none;
+  border-radius: 12rpx;
+  font-size: 32rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.test-button[disabled] {
+  background-color: #9ca3af;
+}
+
+.test-button.secondary {
+  background-color: #3b82f6;
+}
+
+.results-section {
+  margin-bottom: 40rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #1f2937;
+  margin-bottom: 20rpx;
+}
+
+.result-item {
+  background-color: white;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.result-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.result-status {
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.result-details {
+  margin-bottom: 12rpx;
+}
+
+.result-count {
+  font-size: 26rpx;
+  color: #6b7280;
+}
+
+.result-error {
+  background-color: #fef2f2;
+  border: 1rpx solid #fecaca;
+  border-radius: 8rpx;
+  padding: 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.error-text {
+  font-size: 26rpx;
+  color: #dc2626;
+}
+
+.data-preview {
+  background-color: #f9fafb;
+  border-radius: 8rpx;
+  padding: 16rpx;
+}
+
+.preview-title {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8rpx;
+}
+
+.preview-content {
+  display: block;
+  font-size: 24rpx;
+  color: #6b7280;
+  word-break: break-all;
+}
+
+.instructions {
+  background-color: white;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-top: 40rpx;
+}
+
+.instructions-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 16rpx;
+}
+
+.instruction-text {
+  display: block;
+  font-size: 26rpx;
+  color: #6b7280;
+  line-height: 1.6;
+  margin-bottom: 8rpx;
+}

@@ -1,0 +1,184 @@
+<!--pages/home/home.wxml-->
+<view class="home-container">
+  <!-- 顶部固定导航 -->
+  <view class="header">
+    <view class="header-content">
+      <text class="logo-text">锐汗步</text>
+      <view class="header-actions">
+        <view class="search-btn" bindtap="handleSearch">
+          <text class="icon">搜索</text>
+        </view>
+        <view class="notification-btn" bindtap="handleNotification">
+          <text class="icon">通知</text>
+          <view wx:if="{{favoriteCount > 0}}" class="notification-badge">{{favoriteCount}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 欢迎信息 -->
+  <view class="greeting">
+    <text class="greeting-text">
+      你好，<text class="user-name">{{user.name}}</text>
+    </text>
+    <text class="greeting-subtitle">
+      今天也要保持健康活力！
+      <text class="pulse-dot"></text>
+    </text>
+  </view>
+
+
+
+  <!-- 偏好提示（首次使用或无偏好） -->
+  <view wx:if="{{showPreferenceGuide}}" class="preference-guide">
+    <view class="guide-icon">提示</view>
+    <view class="guide-content">
+      <text class="guide-title">个性化推荐</text>
+      <text class="guide-desc">设置您的订阅偏好，获取更精准的内容推荐</text>
+    </view>
+    <view class="guide-action" bindtap="handleSetPreference">
+      <text>去设置</text>
+    </view>
+  </view>
+
+  <!-- 内容切换Tab -->
+  <view class="content-tabs">
+    <view 
+      class="tab-item {{contentMode === 'recommended' ? 'active' : ''}}"
+      bindtap="switchContentMode"
+      data-mode="recommended"
+    >
+      <text>为你推荐</text>
+      <view wx:if="{{contentMode === 'recommended'}}" class="tab-indicator"></view>
+    </view>
+    <view 
+      class="tab-item {{contentMode === 'all' ? 'active' : ''}}"
+      bindtap="switchContentMode"
+      data-mode="all"
+    >
+      <text>全部内容</text>
+      <view wx:if="{{contentMode === 'all'}}" class="tab-indicator"></view>
+    </view>
+  </view>
+
+  <!-- 训练视频区域 -->
+  <view class="section">
+    <view class="section-header">
+      <view class="section-title">
+        <view class="title-icon video-icon">
+          <text class="icon">视频</text>
+        </view>
+        <text>{{contentMode === 'recommended' && user.subscriptions.length > 0 ? '推荐训练' : '训练视频'}}</text>
+      </view>
+      <view wx:if="{{contentMode === 'recommended' && user.subscriptions.length > 0}}" class="subscription-tag">
+        个性化推荐
+      </view>
+    </view>
+
+    <!-- 视频列表（水平滚动） -->
+    <scroll-view 
+      class="video-scroll" 
+      scroll-x="true" 
+      show-scrollbar="{{false}}"
+    >
+      <view class="video-list">
+        <view wx:if="{{videos.length === 0}}" class="empty-state">
+          <text>{{contentMode === 'recommended' ? '暂无推荐视频，请尝试订阅更多主题' : '暂无视频内容'}}</text>
+        </view>
+        
+        <view 
+          wx:for="{{videos}}" 
+          wx:key="id" 
+          class="video-card"
+          bindtap="handleVideoTap"
+          data-video="{{item}}"
+        >
+          <view class="video-thumbnail">
+            <image 
+              class="video-image" 
+              src="{{item.thumbnail}}" 
+              mode="aspectFill"
+            />
+            <view class="video-duration">{{item.duration}}</view>
+            <view class="video-play-overlay">
+              <view class="play-button">
+                <text class="play-icon">播放</text>
+              </view>
+            </view>
+            <!-- 推荐标签 -->
+            <view wx:if="{{contentMode === 'recommended' && item.matchCount > 0}}" class="recommend-badge">
+              匹配 {{item.matchCount}}
+            </view>
+          </view>
+          
+          <view class="video-info">
+            <view class="video-meta">
+              <text class="video-category">{{item.category}}</text>
+              <text class="video-views">{{item.views}} 次观看</text>
+            </view>
+            <text class="video-title">{{item.title}}</text>
+            <!-- 内容标签 -->
+            <view wx:if="{{item.tags && item.tags.length > 0}}" class="content-tags">
+              <text wx:for="{{item.tags}}" wx:for-item="tag" wx:key="tag" class="tag">{{tag}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 健康资讯区域 -->
+  <view class="section">
+    <view class="section-header">
+      <view class="section-title">
+        <view class="title-icon news-icon">
+          <text class="icon">资讯</text>
+        </view>
+        <text>{{contentMode === 'recommended' && user.subscriptions.length > 0 ? '推荐资讯' : '健康资讯'}}</text>
+      </view>
+    </view>
+
+    <view class="news-list">
+      <view wx:if="{{news.length === 0}}" class="empty-state">
+        <text>{{contentMode === 'recommended' ? '暂无推荐资讯' : '暂无资讯更新'}}</text>
+      </view>
+
+      <view 
+        wx:for="{{news}}" 
+        wx:key="id" 
+        class="news-card"
+        bindtap="handleNewsTap"
+        data-news="{{item}}"
+      >
+        <view class="news-image">
+          <image 
+            src="{{item.coverImage}}" 
+            mode="aspectFill"
+          />
+          <!-- 推荐标签 -->
+          <view wx:if="{{contentMode === 'recommended' && item.matchCount > 0}}" class="recommend-badge-news">
+            匹配 {{item.matchCount}}
+          </view>
+        </view>
+        <view class="news-content">
+          <view class="news-meta">
+            <text class="news-category">{{item.category}}</text>
+            <text class="news-date">{{item.date}}</text>
+          </view>
+          <text class="news-title">{{item.title}}</text>
+          <text class="news-summary">{{item.summary}}</text>
+          <!-- 内容标签 -->
+          <view wx:if="{{item.tags && item.tags.length > 0}}" class="content-tags">
+            <text wx:for="{{item.tags}}" wx:for-item="tag" wx:key="tag" class="tag">{{tag}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载状态 -->
+  <view wx:if="{{loading}}" class="loading-container">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+</view>

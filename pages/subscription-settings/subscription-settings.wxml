@@ -1,0 +1,88 @@
+<!--pages/subscription-settings/subscription-settings.wxml-->
+<view class="subscription-settings-container">
+  <!-- 页面标题 -->
+  <view class="page-header">
+    <view class="header-bg">
+      <view class="bg-blob blob-1"></view>
+      <view class="bg-blob blob-2"></view>
+    </view>
+    <view class="header-content">
+      <text class="header-title">订阅偏好设置</text>
+      <text class="header-subtitle">选择您感兴趣的主题，获取精准推荐</text>
+    </view>
+  </view>
+
+  <!-- 订阅统计 -->
+  <view class="stats-section">
+    <view class="stats-card">
+      <view class="stats-item">
+        <text class="stats-number">{{selectedCount}}</text>
+        <text class="stats-label">已订阅</text>
+      </view>
+      <view class="stats-divider"></view>
+      <view class="stats-item">
+        <text class="stats-number">{{totalCount}}</text>
+        <text class="stats-label">可选主题</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 订阅主题列表 -->
+  <view class="topics-section">
+    <view class="section-title">
+      <text class="title-text">选择主题</text>
+      <text class="title-desc">至少选择一个感兴趣的主题</text>
+    </view>
+
+    <!-- 主题卡片 -->
+    <view class="topics-grid">
+      <view 
+        wx:for="{{categories}}" 
+        wx:key="value"
+        class="topic-card {{isSubscribed(item.value) ? 'subscribed' : ''}}"
+        bindtap="toggleSubscription"
+        data-category="{{item.value}}"
+      >
+        <view class="topic-icon">{{item.icon}}</view>
+        <view class="topic-content">
+          <text class="topic-name">{{item.label}}</text>
+          <text class="topic-desc">{{item.description}}</text>
+        </view>
+        <view class="topic-check">
+          <text wx:if="{{isSubscribed(item.value)}}" class="check-icon">✓</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 推荐主题 -->
+  <view class="recommend-section" wx:if="{{recommendedTopics.length > 0}}">
+    <view class="section-title">
+      <text class="title-text">为您推荐</text>
+      <text class="title-desc">基于您的偏好推荐</text>
+    </view>
+
+    <view class="recommend-list">
+      <view 
+        wx:for="{{recommendedTopics}}" 
+        wx:key="value"
+        class="recommend-item"
+        bindtap="toggleSubscription"
+        data-category="{{item.value}}"
+      >
+        <text class="recommend-name">{{item.label}}</text>
+        <text class="recommend-tag">推荐</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="footer-actions">
+    <view class="action-btn cancel-btn" bindtap="handleCancel">
+      <text>取消</text>
+    </view>
+    <view class="action-btn save-btn {{saving ? 'saving' : ''}}" bindtap="handleSave">
+      <text>{{saving ? '保存中...' : '保存设置'}}</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,62 @@
+<!--pages/login/login.wxml-->
+<view class="login-container">
+  <!-- 背景装饰 -->
+  <view class="bg-decoration">
+    <view class="blob blob-1"></view>
+    <view class="blob blob-2"></view>
+    <view class="blob blob-3"></view>
+  </view>
+
+  <!-- 主要内容 -->
+  <view class="login-content">
+    <!-- Logo区域 -->
+    <view class="logo-section">
+      <view class="logo-container">
+        <text class="logo-text">锐汗步</text>
+        <text class="logo-subtitle">Rehaber</text>
+      </view>
+      <text class="tagline">开启你的轻康复之旅</text>
+    </view>
+
+    <!-- 登录表单 -->
+    <view class="form-container">
+      <!-- 微信一键登录按钮 -->
+      <button 
+        class="wechat-login-btn {{loading ? 'loading' : ''}}" 
+        bindtap="handleWeChatLogin"
+        disabled="{{loading}}"
+      >
+        <view wx:if="{{loading}}" class="loading-spinner"></view>
+        <view wx:else class="login-btn-content">
+          <view class="wechat-icon">🔗</view>
+          <text class="login-btn-text">微信一键登录</text>
+          <view class="arrow-icon">→</view>
+        </view>
+      </button>
+
+      <!-- 用户协议提示 -->
+      <view class="agreement-tip">
+        <text class="tip-text">登录即表示同意</text>
+        <text class="link-text" bindtap="showUserAgreement">《用户协议》</text>
+        <text class="tip-text">和</text>
+        <text class="link-text" bindtap="showPrivacyPolicy">《隐私政策》</text>
+      </view>
+    </view>
+
+    <!-- 健康语录卡片 -->
+    <view wx:if="{{healthQuote}}" class="quote-section">
+      <view class="quote-card">
+        <view class="quote-icon">💬</view>
+        <view class="quote-content">
+          <text class="quote-text">{{healthQuote.content}}</text>
+          <text class="quote-author">— {{healthQuote.author || '健康小助手'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 版权信息 -->
+    <view class="copyright">
+      <text>&copy; 2024 Rehaber Inc.</text>
+    </view>
+  </view>
+</view>
